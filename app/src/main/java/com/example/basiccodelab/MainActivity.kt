@@ -59,6 +59,49 @@ fun Myapp(modifier: Modifier = Modifier) {
     }
 }
 
+// state hosting onboarding screen
+@Composable
+fun OnboardingScreen(
+    onContinueClicked: () -> Unit,
+    modifier: Modifier =Modifier
+) {
+    // TODO : this is state should be hosted
+    //var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Welcome to the Basics Codelab!")
+        Button(
+            modifier = Modifier.padding(vertical = 24.dp),
+            onClick = onContinueClicked
+        ) {
+            Text("Continue")
+        }
+    }
+}
+
+@Composable
+private fun Greetings(
+    modifier: Modifier =Modifier,
+    names: List<String> = listOf("World", "compose")
+){
+    Column(modifier = modifier.padding(vertical = 4.dp,)) {
+        for (name in names) {
+            Greeting(name= name)
+        }
+    }
+}
+
+@Preview(showBackground = true , widthDp = 320 , heightDp = 320)
+@Composable
+fun OnboardingPreview(){
+    BasicCodelabTheme {
+        OnboardingScreen(onContinueClicked = {}) // do nothing on click
+    }
+}
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
@@ -89,37 +132,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
-// state hosting onboarding screen
-@Composable
-fun OnboardingScreen(
-    onContinueClicked: () -> Unit,
-    modifier: Modifier =Modifier
-) {
-    // TODO : this is state should be hosted
-    //var shouldShowOnboarding by remember { mutableStateOf(true) }
-
-    Column(
-         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Welcome to the Basics Codelab!")
-        Button(
-            modifier = Modifier.padding(vertical = 24.dp),
-            onClick = onContinueClicked
-        ) {
-            Text("Continue")
-        }
-    }
-}
-@Preview(showBackground = true , widthDp = 320 , heightDp = 320)
-@Composable
-fun OnboardingPreview(){
-    BasicCodelabTheme {
-        OnboardingScreen(onContinueClicked = {}) // do nothing on click
-    }
-}
-
 
 @Preview(showBackground = true , widthDp = 320)
 @Composable
@@ -138,14 +150,3 @@ fun MyAppPreview() {
 }
 
 
-@Composable
-private fun Greetings(
-    modifier: Modifier =Modifier,
-    names: List<String> = listOf("World", "compose")
-){
-    Column(modifier = modifier.padding(vertical = 4.dp,)) {
-        for (name in names) {
-            Greeting(name= name)
-        }
-    }
-}
