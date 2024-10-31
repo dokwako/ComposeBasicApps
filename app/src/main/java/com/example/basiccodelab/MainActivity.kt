@@ -15,6 +15,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,27 +39,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-    ){
-        Row(modifier= Modifier.padding(24.dp)){
-            Column(modifier = modifier.weight(1f)) {
-                Text(text = "Hello")
-                Text(text = name)
-            }
-            ElevatedButton(
-                onClick = {/* TODO*/}
-            ) {
-                Text("Show more")
-            }
-
-        }
-    }
-}
 
 @Composable
 fun Myapp(
@@ -66,10 +47,38 @@ fun Myapp(
 ){
     Column(modifier = modifier.padding(vertical = 4.dp,)) {
         for (name in names) {
-            Greeting("Android")
+            Greeting(name= name)
         }
     }
 }
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    val expanded = remember { mutableStateOf(false) }
+    val extraPadding = if (expanded.value) 48.dp else 0.dp
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        modifier = modifier
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+    ){
+        Row(modifier= Modifier.padding(24.dp)){
+            Column(modifier = modifier
+                .weight(1f)
+                .padding(bottom = extraPadding)
+            ) {
+                Text(text = "Hello")
+                Text(text = name)
+            }
+            ElevatedButton(
+                onClick = { expanded.value =!expanded.value },
+            ) {
+                Text(if (expanded.value) "show less" else "Show more")
+            }
+
+        }
+    }
+}
+
 
 @Preview(showBackground = true , widthDp = 320)
 @Composable
