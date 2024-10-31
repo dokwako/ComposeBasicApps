@@ -52,12 +52,13 @@ fun Myapp(modifier: Modifier = Modifier) {
 
     Surface {
         if (shouldShowOnboarding) {
-            OnboardingScreen(/*TODO*/)
+            OnboardingScreen( onContinueClicked = { shouldShowOnboarding = false})
         } else {
             Greetings()
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
@@ -90,9 +91,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 // state hosting onboarding screen
 @Composable
-fun OnboardingScreen(modifier: Modifier =Modifier){
+fun OnboardingScreen(
+    onContinueClicked: () -> Unit,
+    modifier: Modifier =Modifier
+) {
     // TODO : this is state should be hosted
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
+    //var shouldShowOnboarding by remember { mutableStateOf(true) }
 
     Column(
          modifier = modifier.fillMaxSize(),
@@ -102,7 +106,7 @@ fun OnboardingScreen(modifier: Modifier =Modifier){
         Text("Welcome to the Basics Codelab!")
         Button(
             modifier = Modifier.padding(vertical = 24.dp),
-            onClick = { shouldShowOnboarding = false }
+            onClick = onContinueClicked
         ) {
             Text("Continue")
         }
@@ -112,7 +116,7 @@ fun OnboardingScreen(modifier: Modifier =Modifier){
 @Composable
 fun OnboardingPreview(){
     BasicCodelabTheme {
-        OnboardingScreen()
+        OnboardingScreen(onContinueClicked = {}) // do nothing on click
     }
 }
 
