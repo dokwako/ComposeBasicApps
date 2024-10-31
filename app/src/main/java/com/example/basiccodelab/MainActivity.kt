@@ -48,7 +48,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Myapp(modifier: Modifier = Modifier) {
-    Greetings()
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    Surface {
+        if (shouldShowOnboarding) {
+            OnboardingScreen(/*TODO*/)
+        } else {
+            Greetings()
+        }
+    }
 }
 
 @Composable
@@ -108,6 +116,7 @@ fun OnboardingPreview(){
     }
 }
 
+
 @Preview(showBackground = true , widthDp = 320)
 @Composable
 fun GreetingPreview() {
@@ -115,6 +124,15 @@ fun GreetingPreview() {
         Greetings()
     }
 }
+
+@Preview
+@Composable
+fun MyAppPreview() {
+    BasicCodelabTheme {
+        Myapp(Modifier.fillMaxSize())
+    }
+}
+
 
 @Composable
 private fun Greetings(
