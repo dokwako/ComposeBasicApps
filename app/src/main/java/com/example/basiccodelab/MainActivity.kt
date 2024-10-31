@@ -17,8 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.motionEventSpy
@@ -45,15 +47,8 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Myapp(
-    modifier: Modifier = Modifier,
-    names: List<String> = listOf("World", "compose")
-){
-    Column(modifier = modifier.padding(vertical = 4.dp,)) {
-        for (name in names) {
-            Greeting(name= name)
-        }
-    }
+fun Myapp(modifier: Modifier = Modifier) {
+    Greetings()
 }
 
 @Composable
@@ -65,6 +60,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
     ){
+        //columns and rows
         Row(modifier= Modifier.padding(24.dp)){
             Column(modifier = modifier
                 .weight(1f)
@@ -73,6 +69,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                 Text(text = "Hello")
                 Text(text = name)
             }
+            //button
             ElevatedButton(
                 onClick = { expanded.value =!expanded.value },
             ) {
@@ -83,10 +80,11 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
+// state hosting onboarding screen
 @Composable
 fun OnboardingScreen(modifier: Modifier =Modifier){
     // TODO : this is state should be hosted
-    var ShouldShowOnboarding by remember { mutableStateOf(true) }
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
 
     Column(
          modifier = modifier.fillMaxSize(),
@@ -114,6 +112,18 @@ fun OnboardingPreview(){
 @Composable
 fun GreetingPreview() {
     BasicCodelabTheme {
-        Myapp()
+        Greetings()
+    }
+}
+
+@Composable
+private fun Greetings(
+    modifier: Modifier =Modifier,
+    names: List<String> = listOf("World", "compose")
+){
+    Column(modifier = modifier.padding(vertical = 4.dp,)) {
+        for (name in names) {
+            Greeting(name= name)
+        }
     }
 }
