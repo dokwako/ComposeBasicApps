@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -15,8 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -30,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
@@ -102,46 +110,93 @@ private fun Greetings(
     }
 }
 
-@Preview(showBackground = true , widthDp = 320 , heightDp = 320)
-@Composable
-fun OnboardingPreview(){
-    BasicCodelabTheme {
-        OnboardingScreen(onContinueClicked = {}) // do nothing on click
-    }
-}
 
 @Composable
 private fun Greeting(name: String, modifier: Modifier = Modifier) {
-    var expanded by rememberSaveable  { mutableStateOf(false) }
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
+        modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
+        CardContent(name)
+    }
 
-    val extraPadding by animateDpAsState(
-        if (expanded) 48.dp else 0.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
-    )
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
+
+    //var expanded by rememberSaveable  { mutableStateOf(false) }
+
+//    val extraPadding by animateDpAsState(
+//        if (expanded) 48.dp else 0.dp,
+//        animationSpec = spring(
+//            dampingRatio = Spring.DampingRatioMediumBouncy,
+//            stiffness = Spring.StiffnessLow
+//        )
+//    )
+//    Surface(
+//        color = MaterialTheme.colorScheme.primary,
+//        modifier = modifier
+//            .padding(vertical = 4.dp, horizontal = 8.dp)
+//    ){
+//        //columns and rows
+//        Row(modifier= Modifier.padding(24.dp)){
+//            Column(modifier = modifier
+//                .weight(1f)
+//                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
+//            ) {
+//                Text(text = "Hello")
+//                Text(text = name)
+//            }
+//            //button
+//            ElevatedButton(
+//                onClick = { expanded =!expanded },
+//            ) {
+//                Text(if (expanded) "show less" else "Show more")
+//            }
+//
+//        }
+//    }
+}
+
+@Composable
+private fun CardContent(name:String){
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .padding(12.dp)
+            .animateContentSize (
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
     ){
-        //columns and rows
-        Row(modifier= Modifier.padding(24.dp)){
-            Column(modifier = modifier
+        Column (
+            modifier = Modifier
                 .weight(1f)
-                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
-            ) {
-                Text(text = "Hello")
-                Text(text = name)
+                .padding(12.dp)
+        ){
+            Text(text = "hello")
+            Text(
+                text= name, style = MaterialTheme.typography.headllineMedium.copy(
+                    fontWeight = FontWeight.ExtraBold
+                )
+            )
+            if (expanded) {
+                Text(
+                    text = ("Composem ipsum color sit lazy," + "padding theme elit, sed do bouncy.").repeat(4),
+                )
             }
-            //button
-            ElevatedButton(
-                onClick = { expanded =!expanded },
-            ) {
-                Text(if (expanded) "show less" else "Show more")
-            }
-
+        }
+        IconButton(onClick = {expanded = !expanded}) {
+            Icon(
+                imageVector = if (expanded) Filled.Expandless else Filled.ExpandMore,
+                contentDescription = if (expanded) {
+                    stringResource(R.string.show_less)
+                } else {
+                    stringResource(R.string.show_more)
+                }
+            )
         }
     }
 }
@@ -154,6 +209,15 @@ fun GreetingPreview() {
         Greetings()
     }
 }
+
+@Preview(showBackground = true , widthDp = 320 , heightDp = 320)
+@Composable
+fun OnboardingPreview(){
+    BasicCodelabTheme {
+        OnboardingScreen(onContinueClicked = {}) // do nothing on click
+    }
+}
+
 
 // lastly
 @Preview
