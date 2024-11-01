@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.example.basiccodelab.ui.theme.BasicCodelabTheme
 
@@ -68,7 +72,7 @@ fun OnboardingScreen(
     onContinueClicked: () -> Unit,
     modifier: Modifier =Modifier
 ) {
-    // TODO : this is state should be hosted
+    // T : this is state should be hosted
     //var shouldShowOnboarding by remember { mutableStateOf(true) }
 
     Column(
@@ -107,9 +111,16 @@ fun OnboardingPreview(){
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    val expanded = rememberSaveable  { mutableStateOf(false) }
-    val extraPadding = if (expanded.value) 48.dp else 0.dp
+private fun Greeting(name: String, modifier: Modifier = Modifier) {
+    var expanded by rememberSaveable  { mutableStateOf(false) }
+
+    val extraPadding by animateDpAsState(
+        if (expanded) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
     Surface(
         color = MaterialTheme.colorScheme.primary,
         modifier = modifier
@@ -119,16 +130,16 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         Row(modifier= Modifier.padding(24.dp)){
             Column(modifier = modifier
                 .weight(1f)
-                .padding(bottom = extraPadding)
+                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
                 Text(text = "Hello")
                 Text(text = name)
             }
             //button
             ElevatedButton(
-                onClick = { expanded.value =!expanded.value },
+                onClick = { expanded =!expanded },
             ) {
-                Text(if (expanded.value) "show less" else "Show more")
+                Text(if (expanded) "show less" else "Show more")
             }
 
         }
